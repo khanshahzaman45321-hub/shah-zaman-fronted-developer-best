@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shah Zaman — Frontend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #10131A;
+    --surface: #171B26;
+    --surface-2: #1E2332;
+    --text: #E7E9EE;
+    --muted: #8A90A2;
+    --accent: #FF7A59;
+    --accent-dim: #cf5f45;
+    --mint: #5EEAD4;
+    --line: rgba(231, 233, 238, 0.09);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+  h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .eyebrow::before { content: '// '; color: var(--muted); }
+
+  /* ---------- HEADER ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(16, 19, 26, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 34px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .nav-links a { color: var(--muted); transition: color 0.2s ease; position: relative; }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -6px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .nav-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 9px 18px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .menu-toggle span { width: 22px; height: 2px; background: var(--text); display: block; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 100px 32px 90px;
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 50px;
+    align-items: center;
+  }
+  .hero-role { margin-bottom: 18px; }
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 58px);
+    margin-bottom: 20px;
+  }
+  .hero h1 .highlight { color: var(--accent); }
+  .hero p.lead {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 48ch;
+    margin-bottom: 32px;
+  }
+  .hero-actions { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #14171f;
+    font-weight: 600;
+    padding: 14px 26px;
+    border-radius: 5px;
+    font-size: 14.5px;
+    display: inline-block;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .btn-primary:hover { background: #ff8f6e; transform: translateY(-1px); }
+
+  .btn-ghost {
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 14px 26px;
+    border-radius: 5px;
+    font-size: 14.5px;
+    font-weight: 500;
+    transition: border-color 0.2s ease;
+  }
+  .btn-ghost:hover { border-color: var(--muted); }
+
+  /* code editor signature */
+  .editor {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  }
+  .editor-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.red { background: #FF5F57; }
+  .dot.yellow { background: #FEBC2E; }
+  .dot.green { background: #28C840; }
+  .editor-title {
+    margin-left: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .editor-body {
+    padding: 22px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    min-height: 210px;
+  }
+  .editor-body .ln { color: var(--muted); display: inline-block; width: 20px; user-select: none; }
+  .code-key { color: #C792EA; }
+  .code-str { color: var(--mint); }
+  .code-prop { color: #82AAFF; }
+  .code-punc { color: var(--muted); }
+  #typed-cursor { color: var(--accent); }
+
+  /* ---------- STRIP ---------- */
+  .strip {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 24px 0;
+  }
+  .strip .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  section { padding: 100px 0; }
+
+  .section-head { margin-bottom: 56px; max-width: 640px; }
+  .section-head h2 { font-size: clamp(28px, 3.4vw, 38px); margin-top: 12px; }
+  .section-head p { color: var(--muted); margin-top: 14px; font-size: 15.5px; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 60px;
+  }
+  .about-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 30px;
+  }
+  .about-card .initials {
+    width: 64px; height: 64px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--mint));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #10131A;
+    margin-bottom: 18px;
+  }
+  .about-card h3 { font-size: 20px; margin-bottom: 4px; }
+  .about-card .role { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .about-card ul li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .about-card ul li span:first-child { color: var(--muted); }
+
+  .about-body p { color: var(--muted); margin-bottom: 18px; font-size: 15.5px; }
+  .about-body strong { color: var(--text); }
+
+  .timeline { margin-top: 26px; }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .timeline-item .year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--accent);
+    padding-top: 2px;
+  }
+  .timeline-item h4 { font-size: 15.5px; font-weight: 600; margin-bottom: 4px; }
+  .timeline-item p { font-size: 14px; color: var(--muted); }
+
+  /* ---------- SKILLS ---------- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .skill-card .top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .skill-card .top span:last-child { color: var(--accent); }
+  .bar-track {
+    height: 6px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--mint));
+    border-radius: 4px;
+    transition: width 1.1s ease;
+  }
+  .skill-card p { font-size: 13px; color: var(--muted); margin-top: 12px; }
+
+  /* ---------- PROJECTS ---------- */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-thumb {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    background:
+      linear-gradient(135deg, rgba(255,122,89,0.12), rgba(94,234,212,0.08));
+    border-bottom: 1px solid var(--line);
+  }
+  .project-info { padding: 22px 24px 24px; }
+  .project-info h3 { font-size: 18px; margin-bottom: 8px; }
+  .project-info p { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--surface-2);
+    color: var(--mint);
+  }
+  .project-link { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .project-link:hover { text-decoration: underline; }
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 60px;
+  }
+  .contact-info p { color: var(--muted); margin-bottom: 26px; font-size: 15.5px; }
+  .contact-list li {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14.5px;
+  }
+  .contact-list li span.k {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    width: 90px;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+
+  form {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 30px;
+  }
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .field input, .field textarea {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .field textarea { resize: vertical; min-height: 100px; }
+  .error-msg {
+    color: var(--accent);
+    font-size: 12.5px;
+    margin-top: 6px;
+    display: none;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .field.invalid input, .field.invalid textarea { border-color: var(--accent); }
+  .field.invalid .error-msg { display: block; }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #14171f;
+    font-weight: 600;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14.5px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s ease;
+  }
+  .submit-btn:hover { background: #ff8f6e; }
+
+  .form-success {
+    display: none;
+    background: rgba(94, 234, 212, 0.1);
+    border: 1px solid var(--mint);
+    color: var(--mint);
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 34px 0;
+  }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  footer .socials { display: flex; gap: 20px; }
+  footer .socials a { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  footer .socials a:hover { color: var(--accent); }
+
+  /* back to top */
+  #back-to-top {
+    position: fixed;
+    right: 26px;
+    bottom: 26px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #14171f;
+    border: none;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    z-index: 60;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .menu-toggle { display: flex; }
+    .hero { grid-template-columns: 1fr; padding-top: 60px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 34px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .skills-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+  }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">Shah<span>.</span>Zaman</div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Hire me</a>
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="hero-role eyebrow">Frontend Developer · BS CS Student</div>
+    <h1>Hi, I'm <span class="highlight">Shah Zaman</span> — I build clean, fast interfaces for the web.</h1>
+    <p class="lead">BS Computer Science student at the University of Engineering &amp; Technology, Abbottabad Campus. I work with HTML, CSS and JavaScript to turn designs into responsive, functional websites.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View my work</a>
+      <a href="#contact" class="btn-ghost">Get in touch</a>
+    </div>
+  </div>
+  <div class="editor">
+    <div class="editor-bar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="editor-title">shahzaman.js</span>
+    </div>
+    <div class="editor-body">
+      <div><span class="ln">1</span><span class="code-key">const</span> developer = {</div>
+      <div><span class="ln">2</span>&nbsp;&nbsp;<span class="code-prop">name</span>: <span class="code-str">"Shah Zaman"</span>,</div>
+      <div><span class="ln">3</span>&nbsp;&nbsp;<span class="code-prop">degree</span>: <span class="code-str">"BS Computer Science"</span>,</div>
+      <div><span class="ln">4</span>&nbsp;&nbsp;<span class="code-prop">university</span>: <span class="code-str">"UET Abbottabad Campus"</span>,</div>
+      <div><span class="ln">5</span>&nbsp;&nbsp;<span class="code-prop">stack</span>: [<span class="code-str">"HTML"</span>, <span class="code-str">"CSS"</span>, <span class="code-str">"JavaScript"</span>],</div>
+      <div><span class="ln">6</span>&nbsp;&nbsp;<span class="code-prop">status</span>: <span id="typed-text"></span><span id="typed-cursor">|</span></div>
+      <div><span class="ln">7</span><span class="code-punc">};</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <span>UET ABBOTTABAD CAMPUS</span>
+    <span>BS COMPUTER SCIENCE</span>
+    <span>HTML · CSS · JAVASCRIPT</span>
+    <span>OPEN TO OPPORTUNITIES</span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">About me</span>
+      <h2>A bit about my background</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="initials">SZ</div>
+        <h3>Shah Zaman</h3>
+        <div class="role">Frontend Developer</div>
+        <ul>
+          <li><span>Degree</span><span>BS Computer Science</span></li>
+          <li><span>University</span><span>UET Abbottabad Campus</span></li>
+          <li><span>Focus</span><span>Frontend Development</span></li>
+          <li><span>Stack</span><span>HTML / CSS / JS</span></li>
+        </ul>
+      </div>
+      <div class="about-body">
+        <p>I'm a <strong>BS Computer Science student</strong> at the <strong>University of Engineering and Technology, Abbottabad Campus</strong>, with a strong interest in frontend web development. I enjoy turning ideas into interfaces that are clean, responsive, and easy to use.</p>
+        <p>Alongside my degree, I've been building my skills in <strong>HTML, CSS, and JavaScript</strong> — practicing by building real projects, breaking things, and fixing them until they work the way they should.</p>
+        <p>I'm currently looking to grow further as a developer, take on real-world projects, and keep learning modern frontend tools and frameworks.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="year">Ongoing</div>
+            <div>
+              <h4>BS Computer Science</h4>
+              <p>University of Engineering &amp; Technology, Abbottabad Campus</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="year">Self-taught</div>
+            <div>
+              <h4>Frontend Development</h4>
+              <p>HTML, CSS &amp; JavaScript — building projects and improving through practice</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Skills</span>
+      <h2>Tools I work with</h2>
+      <p>My core stack as a frontend developer, along with the tools I use every day.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="top"><span>HTML</span><span>90%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="90"></div></div>
+        <p>Semantic markup, accessibility basics, and page structure.</p>
+      </div>
+      <div class="skill-card">
+        <div class="top"><span>CSS</span><span>85%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+        <p>Flexbox, Grid, responsive design, and styling from scratch.</p>
+      </div>
+      <div class="skill-card">
+        <div class="top"><span>JavaScript</span><span>75%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="75"></div></div>
+        <p>DOM manipulation, events, and building interactive UI.</p>
+      </div>
+      <div class="skill-card">
+        <div class="top"><span>Git &amp; GitHub</span><span>70%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="70"></div></div>
+        <p>Version control, commits, and managing project repos.</p>
+      </div>
+      <div class="skill-card">
+        <div class="top"><span>Responsive Design</span><span>80%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="80"></div></div>
+        <p>Building layouts that work across mobile, tablet, and desktop.</p>
+      </div>
+      <div class="skill-card">
+        <div class="top"><span>Problem Solving</span><span>85%</span></div>
+        <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+        <p>Breaking down problems from my CS coursework and applying them to code.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Projects</span>
+      <h2>Things I've built</h2>
+      <p>A few sample projects — replace these with your own work and links.</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-thumb">&lt;/&gt; project-01</div>
+        <div class="project-info">
+          <h3>Personal Portfolio Website</h3>
+          <p>A responsive personal portfolio built to showcase my skills and projects as a frontend developer.</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+          </div>
+          <a href="#" class="project-link">View project →</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">&lt;/&gt; project-02</div>
+        <div class="project-info">
+          <h3>Landing Page Clone</h3>
+          <p>Recreated a modern product landing page focusing on layout, spacing, and responsive behavior.</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span><span class="tag">CSS</span>
+          </div>
+          <a href="#" class="project-link">View project →</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">&lt;/&gt; project-03</div>
+        <div class="project-info">
+          <h3>To-Do List App</h3>
+          <p>A simple task manager with add, complete, and delete functionality using vanilla JavaScript.</p>
+          <div class="tag-row">
+            <span class="tag">JavaScript</span><span class="tag">DOM</span>
+          </div>
+          <a href="#" class="project-link">View project →</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">&lt;/&gt; project-04</div>
+        <div class="project-info">
+          <h3>University Project Site</h3>
+          <p>A small multi-page site built as part of coursework at UET Abbottabad Campus.</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span>
+          </div>
+          <a href="#" class="project-link">View project →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="background: var(--surface); border-top: 1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Contact</span>
+      <h2>Let's work together</h2>
+      <p>Have a project in mind or just want to say hi? Send me a message below.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p>I'm currently open to freelance work, internships, and collaboration opportunities. Feel free to reach out — I usually reply within a day or two.</p>
+        <ul class="contact-list">
+          <li><span class="k">Name</span><span>Shah Zaman</span></li>
+          <li><span class="k">Role</span><span>Frontend Developer</span></li>
+          <li><span class="k">University</span><span>UET Abbottabad Campus</span></li>
+          <li><span class="k">WhatsApp No</span><span> 03028936940</span></li>  
+          <li><span class="k">Email</span><span>khanshahzaman45321.@gmail.com</span></li>
+        </ul>
+      </div>
+      <form id="contact-form" novalidate>
+        <div class="field" id="field-name">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" placeholder="e.g. Ali Raza">
+          <div class="error-msg">Please enter your name.</div>
+        </div>
+        <div class="field" id="field-email">
+          <label for="email">Your email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com">
+          <div class="error-msg">Please enter a valid email address.</div>
+        </div>
+        <div class="field" id="field-message">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell me about your project..."></textarea>
+          <div class="error-msg">Please enter a message (at least 10 characters).</div>
+        </div>
+        <button type="submit" class="submit-btn">Send message</button>
+        <div class="form-success" id="form-success">✓ Message ready — connect a backend or email service to actually send this.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Shah Zaman. Built with HTML, CSS &amp; JavaScript.</span>
+    <div class="socials">
+      <a href="#">GitHub</a>
+      <a href="#">LinkedIn</a>
+      <a href="#">Email</a>
+    </div>
+  </div>
+</footer>
+
+<button id="back-to-top" aria-label="Back to top">↑</button>
+
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menu-toggle');
+  const navLinks = document.getElementById('nav-links');
+  menuToggle.addEventListener('click', () => {
+    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+    navLinks.style.flexDirection = 'column';
+    navLinks.style.position = 'absolute';
+    navLinks.style.top = '64px';
+    navLinks.style.right = '32px';
+    navLinks.style.background = 'var(--surface)';
+    navLinks.style.border = '1px solid var(--line)';
+    navLinks.style.borderRadius = '8px';
+    navLinks.style.padding = '16px 22px';
+    navLinks.style.gap = '14px';
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (window.innerWidth <= 900) navLinks.style.display = 'none';
+    });
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 120;
+      if (window.scrollY >= top) current = sec.getAttribute('id');
+    });
+    navItems.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+
+    // back to top visibility
+    document.getElementById('back-to-top').style.display = window.scrollY > 500 ? 'flex' : 'none';
+  });
+
+  document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Typing effect in hero code block
+  const words = ["\"learning\"", "\"building\"", "\"open to work\""];
+  let wordIndex = 0, charIndex = 0, deleting = false;
+  const typedEl = document.getElementById('typed-text');
+
+  function typeLoop() {
+    const current = words[wordIndex];
+    if (!deleting) {
+      typedEl.textContent = current.slice(0, ++charIndex);
+      if (charIndex === current.length) {
+        deleting = true;
+        setTimeout(typeLoop, 1200);
+        return;
+      }
+    } else {
+      typedEl.textContent = current.slice(0, --charIndex);
+      if (charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+      }
+    }
+    setTimeout(typeLoop, deleting ? 50 : 90);
+  }
+  typeLoop();
+
+  // Animate skill bars when visible
+  const bars = document.querySelectorAll('.bar-fill');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.width = entry.target.dataset.width + '%';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  bars.forEach(bar => observer.observe(bar));
+
+  // Contact form validation
+  const form = document.getElementById('contact-form');
+  const successMsg = document.getElementById('form-success');
+
+  function validateField(fieldId, isValid) {
+    const field = document.getElementById(fieldId);
+    field.classList.toggle('invalid', !isValid);
+    return isValid;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    successMsg.style.display = 'none';
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const nameValid = name.length > 1;
+    const emailValid = emailPattern.test(email);
+    const messageValid = message.length >= 10;
+
+    validateField('field-name', nameValid);
+    validateField('field-email', emailValid);
+    validateField('field-message', messageValid);
+
+    if (nameValid && emailValid && messageValid) {
+      successMsg.style.display = 'block';
+      form.reset();
+    }
+  });
+</script>
+
+</body>
+</html>
